@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  fingerprint-generator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fingerprint-generator
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - TZ=UTC
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+      - ./config:/app/config
+    networks:
+      - fingerprint-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "console.log('Health check')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  redis:
+    image: redis:7-alpine
+    container_name: fingerprint-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
+    command: redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      - fingerprint-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: fingerprint-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: fingerprint_db
+      POSTGRES_USER: fingerprint_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secure_password}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - fingerprint-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fingerprint_user -d fingerprint_db"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  nginx:
+    image: nginx:alpine
+    container_name: fingerprint-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+      - ./logs/nginx:/var/log/nginx
+    depends_on:
+      - fingerprint-generator
+    networks:
+      - fingerprint-network
+
+volumes:
+  redis-data:
+    driver: local
+  postgres-data:
+    driver: local
+
+networks:
+  fingerprint-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

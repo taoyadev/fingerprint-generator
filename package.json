@@ -1,0 +1,61 @@
+{
+  "name": "fingerprint-generator",
+  "version": "1.0.0",
+  "description": "A comprehensive browser fingerprint generation and testing toolkit for security research and privacy analysis",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "start": "node dist/index.js",
+    "start:dev": "ts-node src/index.ts",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:unit": "jest --testPathPatterns=tests/unit",
+    "test:integration": "jest --testPathPatterns=tests/integration",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write src/**/*.ts",
+    "format:check": "prettier --check src/**/*.ts",
+    "clean": "rm -rf dist",
+    "clean:all": "rm -rf dist node_modules",
+    "demo": "ts-node -e \"import('./src/FingerprintGenerator').then(m => new m.FingerprintGenerator().generate().then(fp => console.log(JSON.stringify(fp, null, 2))))\"",
+    "cli": "ts-node src/cli.ts"
+  },
+  "keywords": [
+    "fingerprint",
+    "browser",
+    "privacy",
+    "security",
+    "detection",
+    "research"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bin": {
+    "fingerprint-generator": "dist/cli/index.js"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.3",
+    "@typescript-eslint/parser": "^8.46.3",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "eslint": "^9.39.1",
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.2",
+    "ts-jest": "^29.4.5",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  }
+}
