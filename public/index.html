@@ -1433,21 +1433,21 @@
       batchBtn.innerHTML = '<span class="loading"></span> Streaming...';
       setStatus('Streaming batch...');
 
-      let count = 0;
+      let receivedCount = 0;
 
       stream.onmessage = event => {
         const data = JSON.parse(event.data);
-        count++;
+        receivedCount++;
         batchResultEl.textContent += JSON.stringify(data, null, 2) + '\\n\\n';
         batchResultEl.scrollTop = batchResultEl.scrollHeight;
-        setStatus('Received ' + count + ' fingerprints...');
+        setStatus('Received ' + receivedCount + ' fingerprints...');
       };
 
       stream.addEventListener('done', () => {
         stream.close();
         batchBtn.disabled = false;
         batchBtn.innerHTML = '▶▶ Stream Batch';
-        setStatus('Batch complete. ' + count + ' fingerprints generated.', 'success');
+        setStatus('Batch complete. ' + receivedCount + ' fingerprints generated.', 'success');
         showToast('Batch streaming complete!');
 
         // Switch to batch result tab
