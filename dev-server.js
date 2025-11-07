@@ -993,9 +993,9 @@ function renderApp(res) {
   <header>
     <div class="logo">[ FINGERPRINT_GEN ]</div>
     <nav class="nav-items">
-      <a href="https://github.com/your-org/fingerprint-generator" target="_blank" rel="noreferrer">GitHub</a>
+      <a href="https://github.com/taoyadev/fingerprint-generator" target="_blank" rel="noreferrer">GitHub</a>
       <a href="#docs">Docs</a>
-      <a href="https://github.com/your-org/fingerprint-generator/blob/main/SECURITY.md" target="_blank" rel="noreferrer">Security</a>
+      <a href="https://github.com/taoyadev/fingerprint-generator/blob/main/SECURITY.md" target="_blank" rel="noreferrer">Security</a>
     </nav>
   </header>
 
@@ -1134,21 +1134,21 @@ function renderApp(res) {
     <div class="footer-grid">
       <div>
         <h3>Resources</h3>
-        <a href="https://github.com/your-org/fingerprint-generator/blob/main/README.md" target="_blank" rel="noreferrer">README</a>
-        <a href="https://github.com/your-org/fingerprint-generator/blob/main/ARCHITECTURE.md" target="_blank" rel="noreferrer">Architecture</a>
-        <a href="https://github.com/your-org/fingerprint-generator/blob/main/PERFORMANCE.md" target="_blank" rel="noreferrer">Performance</a>
+        <a href="https://github.com/taoyadev/fingerprint-generator/blob/main/README.md" target="_blank" rel="noreferrer">README</a>
+        <a href="https://github.com/taoyadev/fingerprint-generator/blob/main/ARCHITECTURE.md" target="_blank" rel="noreferrer">Architecture</a>
+        <a href="https://github.com/taoyadev/fingerprint-generator/blob/main/PERFORMANCE.md" target="_blank" rel="noreferrer">Performance</a>
       </div>
       <div>
         <h3>Documentation</h3>
-        <a href="https://github.com/your-org/fingerprint-generator/blob/main/INTEGRATION.md" target="_blank" rel="noreferrer">Integration Guide</a>
-        <a href="https://github.com/your-org/fingerprint-generator/blob/main/SECURITY.md" target="_blank" rel="noreferrer">Security Best Practices</a>
-        <a href="https://github.com/your-org/fingerprint-generator#quick-start" target="_blank" rel="noreferrer">Quick Start</a>
+        <a href="https://github.com/taoyadev/fingerprint-generator/blob/main/INTEGRATION.md" target="_blank" rel="noreferrer">Integration Guide</a>
+        <a href="https://github.com/taoyadev/fingerprint-generator/blob/main/SECURITY.md" target="_blank" rel="noreferrer">Security Best Practices</a>
+        <a href="https://github.com/taoyadev/fingerprint-generator#quick-start" target="_blank" rel="noreferrer">Quick Start</a>
       </div>
       <div>
         <h3>Community</h3>
-        <a href="https://github.com/your-org/fingerprint-generator" target="_blank" rel="noreferrer">GitHub Repository</a>
-        <a href="https://github.com/your-org/fingerprint-generator/issues" target="_blank" rel="noreferrer">Report Issues</a>
-        <a href="https://github.com/your-org/fingerprint-generator/discussions" target="_blank" rel="noreferrer">Discussions</a>
+        <a href="https://github.com/taoyadev/fingerprint-generator" target="_blank" rel="noreferrer">GitHub Repository</a>
+        <a href="https://github.com/taoyadev/fingerprint-generator/issues" target="_blank" rel="noreferrer">Report Issues</a>
+        <a href="https://github.com/taoyadev/fingerprint-generator/discussions" target="_blank" rel="noreferrer">Discussions</a>
       </div>
     </div>
 

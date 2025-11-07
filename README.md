@@ -369,7 +369,7 @@ npm install fingerprint-generator
 **Install from source:**
 
 ```bash
-git clone https://github.com/your-org/fingerprint-generator.git
+git clone https://github.com/taoyadev/fingerprint-generator.git
 cd fingerprint-generator
 npm install
 npm run build
