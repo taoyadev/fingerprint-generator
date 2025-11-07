@@ -249,7 +249,26 @@
       padding: 2rem 5vw 4rem;
     }
 
-    /* Grid Layout */
+    /* Two-Column Layout */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 500px 1fr;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .left-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .right-column {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Grid Layout (deprecated, kept for compatibility) */
     .terminal-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -496,7 +515,8 @@
       padding: 1rem;
       font-size: 0.8rem;
       color: var(--neon-green);
-      max-height: 500px;
+      max-height: 800px;
+      min-height: 400px;
       overflow-y: auto;
       font-family: 'JetBrains Mono', monospace;
       box-shadow: inset 0 0 20px rgba(0, 255, 136, 0.1);
@@ -532,7 +552,7 @@
 
     /* Results Panel */
     .results-panel {
-      grid-column: 1 / -1;
+      height: 100%;
     }
 
     .results-tabs {
@@ -702,6 +722,10 @@
     @media (max-width: 768px) {
       .nav-items {
         display: none;
+      }
+
+      .main-layout {
+        grid-template-columns: 1fr;
       }
 
       .terminal-grid {
@@ -1025,9 +1049,11 @@
   </section>
 
   <div class="container">
-    <div class="terminal-grid">
-      <!-- Control Panel -->
-      <div class="glass-panel">
+    <div class="main-layout">
+      <!-- Left Column: Control Center + Quick Presets -->
+      <div class="left-column">
+        <!-- Control Panel -->
+        <div class="glass-panel">
         <div class="panel-header">
           <span class="panel-icon">⚙️</span>
           <h2 class="panel-title">CONTROL CENTER</h2>
@@ -1102,10 +1128,12 @@
           </div>
         </div>
       </div>
-    </div>
+      </div>
 
-    <!-- Results Panel -->
-    <div class="glass-panel results-panel">
+      <!-- Right Column: Terminal Output -->
+      <div class="right-column">
+        <!-- Results Panel -->
+        <div class="glass-panel results-panel">
       <div class="panel-header">
         <span class="panel-icon">📡</span>
         <h2 class="panel-title">TERMINAL OUTPUT</h2>
@@ -1127,6 +1155,8 @@
         <div style="position: relative;">
           <button class="copy-btn" data-target="batchResult">Copy JSON</button>
           <div class="terminal-output" id="batchResult">// Click "Stream Batch" to see output...</div>
+        </div>
+      </div>
         </div>
       </div>
     </div>
