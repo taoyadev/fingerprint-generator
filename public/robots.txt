@@ -1,0 +1,6 @@
+# https://fingerprintgenerator.com/robots.txt
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://fingerprintgenerator.com/sitemap.xml

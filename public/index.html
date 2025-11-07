@@ -1,0 +1,1475 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Browser Fingerprint Generator - Statistical Anti-Bot Bypass Tool</title>
+  <meta name="description" content="Generate statistically perfect browser fingerprints using Bayesian networks. 99.7% bypass rate, 10-20x faster than browser automation. Open source fingerprinting tool for security research." />
+  <meta name="keywords" content="browser fingerprint generator, anti bot bypass, fingerprinting tool, canvas fingerprint, webgl fingerprint, tls fingerprint, ja3 ja4, browser automation, security research, puppeteer stealth, playwright fingerprint" />
+  <meta name="author" content="Fingerprint Generator Team" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://fingerprintgenerator.com/" />
+  <meta property="og:title" content="Browser Fingerprint Generator - Statistical Anti-Bot Bypass Tool" />
+  <meta property="og:description" content="Generate statistically perfect browser fingerprints using Bayesian networks. 99.7% bypass rate, 10-20x faster than browser automation. Open source tool for security research." />
+  <meta property="og:image" content="https://fingerprintgenerator.com/og-image.png" />
+  <meta property="og:site_name" content="Fingerprint Generator" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://fingerprintgenerator.com/" />
+  <meta name="twitter:title" content="Browser Fingerprint Generator - Statistical Anti-Bot Bypass" />
+  <meta name="twitter:description" content="Generate statistically perfect browser fingerprints using Bayesian networks. 99.7% bypass rate, 10-20x faster than browser automation." />
+  <meta name="twitter:image" content="https://fingerprintgenerator.com/og-image.png" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://fingerprintgenerator.com/" />
+
+  <!-- Preconnect for Performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- DNS Prefetch -->
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+
+  <!-- Optimized Font Loading -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+
+    :root {
+      --bg-primary: #0a0e27;
+      --bg-secondary: #0f1420;
+      --glass-bg: rgba(15, 20, 32, 0.7);
+      --glass-border: rgba(0, 255, 136, 0.15);
+      --neon-green: #00ff88;
+      --neon-pink: #ff006e;
+      --neon-cyan: #00d9ff;
+      --text-primary: #e0e7ff;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --glow-green: 0 0 20px rgba(0, 255, 136, 0.5);
+      --glow-pink: 0 0 20px rgba(255, 0, 110, 0.5);
+      --glow-cyan: 0 0 20px rgba(0, 217, 255, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      background: var(--bg-primary);
+      background-image:
+        radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 0, 110, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(0, 217, 255, 0.05) 0%, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Cyberpunk Header */
+    header {
+      background: var(--glass-bg);
+      border-bottom: 2px solid var(--neon-green);
+      box-shadow: var(--glow-green);
+      backdrop-filter: blur(10px);
+      padding: 1rem 5vw;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .logo {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--neon-green);
+      text-shadow: 0 0 10px rgba(0, 255, 136, 0.8);
+      letter-spacing: 2px;
+    }
+
+    .nav-items {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.85rem;
+    }
+
+    .nav-items a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-items a::before {
+      content: '>';
+      position: absolute;
+      left: -12px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      color: var(--neon-cyan);
+    }
+
+    .nav-items a:hover {
+      color: var(--neon-cyan);
+      text-shadow: 0 0 8px rgba(0, 217, 255, 0.6);
+    }
+
+    .nav-items a:hover::before {
+      opacity: 1;
+    }
+
+    /* Hero Section */
+    .cyber-hero {
+      padding: 4rem 5vw 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glitch {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      color: var(--neon-green);
+      text-shadow:
+        0 0 10px rgba(0, 255, 136, 0.8),
+        0 0 20px rgba(0, 255, 136, 0.5),
+        0 0 40px rgba(0, 255, 136, 0.3);
+      margin-bottom: 1rem;
+      letter-spacing: -1px;
+      animation: flicker 3s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      41%, 43% { opacity: 0.9; }
+      45%, 47% { opacity: 0.95; }
+    }
+
+    .subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      font-weight: 400;
+    }
+
+    .subtitle span {
+      color: var(--neon-pink);
+      font-weight: 600;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .stat-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+
+    .stat-card:hover::before {
+      transform: translateX(100%);
+    }
+
+    .stat-card:hover {
+      border-color: var(--neon-green);
+      box-shadow: var(--glow-green);
+      transform: translateY(-4px);
+    }
+
+    .stat-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-title {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-value {
+      font-size: 1.1rem;
+      color: var(--neon-cyan);
+      font-weight: 600;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 5vw 4rem;
+    }
+
+    /* Grid Layout */
+    .terminal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    /* Glass Panel */
+    .glass-panel {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .glass-panel:hover {
+      border-color: var(--neon-green);
+      box-shadow: var(--glow-green);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .panel-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--neon-green);
+      text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+    }
+
+    .panel-icon {
+      font-size: 1.2rem;
+    }
+
+    /* Form Styling */
+    .control-group {
+      margin-bottom: 1rem;
+    }
+
+    .control-label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.4rem;
+    }
+
+    .control-input,
+    .control-select {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--glass-border);
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .control-input:focus,
+    .control-select:focus {
+      outline: none;
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
+    }
+
+    .control-input::placeholder {
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+
+    /* Cyber Button */
+    .cyber-btn {
+      width: 100%;
+      padding: 0.9rem 1.5rem;
+      background: transparent;
+      border: 2px solid var(--neon-green);
+      border-radius: 6px;
+      color: var(--neon-green);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      margin-bottom: 0.75rem;
+    }
+
+    .cyber-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--neon-green);
+      transition: left 0.3s ease;
+      z-index: -1;
+    }
+
+    .cyber-btn:hover::before {
+      left: 0;
+    }
+
+    .cyber-btn:hover {
+      color: var(--bg-primary);
+      box-shadow: var(--glow-green);
+      transform: translateY(-2px);
+    }
+
+    .cyber-btn:active {
+      transform: translateY(0);
+    }
+
+    .cyber-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .cyber-btn.secondary {
+      border-color: var(--neon-pink);
+      color: var(--neon-pink);
+    }
+
+    .cyber-btn.secondary::before {
+      background: var(--neon-pink);
+    }
+
+    .cyber-btn.secondary:hover {
+      box-shadow: var(--glow-pink);
+    }
+
+    /* Status Bar */
+    .status-bar {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--glass-border);
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .status-bar::before {
+      content: '●';
+      color: var(--neon-cyan);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .status-bar.success::before {
+      color: var(--neon-green);
+    }
+
+    .status-bar.error::before {
+      color: var(--neon-pink);
+    }
+
+    /* Preset Cards */
+    .presets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .preset-card {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .preset-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 40px 40px 0;
+      border-color: transparent var(--neon-green) transparent transparent;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .preset-card:hover {
+      border-color: var(--neon-green);
+      box-shadow: var(--glow-green);
+      transform: translateY(-3px);
+    }
+
+    .preset-card:hover::after {
+      opacity: 0.3;
+    }
+
+    .preset-card.active {
+      border-color: var(--neon-green);
+      background: rgba(0, 255, 136, 0.05);
+    }
+
+    .preset-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .preset-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Terminal Output */
+    .terminal-output {
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid var(--neon-green);
+      border-radius: 8px;
+      padding: 1rem;
+      font-size: 0.8rem;
+      color: var(--neon-green);
+      max-height: 500px;
+      overflow-y: auto;
+      font-family: 'JetBrains Mono', monospace;
+      box-shadow: inset 0 0 20px rgba(0, 255, 136, 0.1);
+      position: relative;
+    }
+
+    .terminal-output::before {
+      content: '$ ';
+      color: var(--neon-cyan);
+      position: sticky;
+      top: 0;
+      left: 0;
+    }
+
+    .terminal-output::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .terminal-output::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .terminal-output::-webkit-scrollbar-thumb {
+      background: var(--neon-green);
+      border-radius: 4px;
+    }
+
+    .terminal-output pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    /* Results Panel */
+    .results-panel {
+      grid-column: 1 / -1;
+    }
+
+    .results-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .tab-btn {
+      padding: 0.6rem 1.2rem;
+      background: transparent;
+      border: 1px solid var(--glass-border);
+      border-radius: 6px;
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn:hover {
+      border-color: var(--neon-cyan);
+      color: var(--neon-cyan);
+    }
+
+    .tab-btn.active {
+      border-color: var(--neon-green);
+      color: var(--neon-green);
+      box-shadow: var(--glow-green);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Copy Button */
+    .copy-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.5rem 1rem;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--neon-cyan);
+      border-radius: 4px;
+      color: var(--neon-cyan);
+      font-family: inherit;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+
+    .copy-btn:hover {
+      background: var(--neon-cyan);
+      color: var(--bg-primary);
+      box-shadow: var(--glow-cyan);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      background: var(--glass-bg);
+      border: 2px solid var(--neon-green);
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      color: var(--text-primary);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--glow-green);
+      animation: slideIn 0.3s ease, slideOut 0.3s ease 2.7s;
+      z-index: 1000;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideOut {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+    }
+
+    /* Footer */
+    footer {
+      background: var(--glass-bg);
+      border-top: 1px solid var(--glass-border);
+      padding: 2rem 5vw;
+      margin-top: 4rem;
+      backdrop-filter: blur(10px);
+    }
+
+    footer .footer-grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+
+    footer h3 {
+      font-size: 0.9rem;
+      color: var(--neon-green);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    footer a {
+      display: block;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    footer a:hover {
+      color: var(--neon-cyan);
+      text-shadow: 0 0 8px rgba(0, 217, 255, 0.6);
+      padding-left: 8px;
+    }
+
+    footer .disclaimer {
+      grid-column: 1 / -1;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--glass-border);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* Loading Animation */
+    .loading {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--neon-green);
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-items {
+        display: none;
+      }
+
+      .terminal-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .presets-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Keyboard Shortcuts Hint */
+    .shortcuts-hint {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      backdrop-filter: blur(10px);
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+    }
+
+    .shortcuts-hint:hover {
+      opacity: 1;
+    }
+
+    .shortcuts-hint kbd {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+      border: 1px solid var(--glass-border);
+      font-family: inherit;
+      color: var(--neon-cyan);
+    }
+
+    /* Content Section Styles */
+    .content-section {
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%);
+      padding: 4rem 2rem;
+      margin: 4rem 0 2rem 0;
+    }
+
+    .content-article {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
+      line-height: 1.8;
+    }
+
+    .content-article h2 {
+      color: var(--neon-cyan);
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid var(--neon-cyan);
+      padding-bottom: 0.5rem;
+      text-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
+    }
+
+    .content-article h3 {
+      color: var(--neon-purple);
+      font-size: 1.3rem;
+      margin: 2rem 0 1rem 0;
+      text-shadow: 0 0 8px rgba(156, 39, 176, 0.4);
+    }
+
+    .content-article p {
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 1.2rem;
+      font-size: 1rem;
+    }
+
+    .content-article strong {
+      color: var(--neon-cyan);
+      font-weight: 600;
+    }
+
+    .highlight-box {
+      background: rgba(0, 247, 255, 0.05);
+      border-left: 4px solid var(--neon-cyan);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border-radius: 6px;
+      backdrop-filter: blur(5px);
+    }
+
+    .highlight-box p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .process-list, .feature-list {
+      padding-left: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .process-list li, .feature-list li {
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 0.8rem;
+      line-height: 1.6;
+    }
+
+    .process-list strong, .feature-list strong {
+      color: var(--neon-purple);
+    }
+
+    .faq-section {
+      padding: 3rem 2.5rem;
+    }
+
+    .faq-item {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 247, 255, 0.1);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .faq-item:hover {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 20px rgba(0, 247, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .faq-item h3 {
+      color: var(--neon-cyan);
+      font-size: 1.1rem;
+      margin: 0 0 1rem 0;
+      text-shadow: 0 0 8px rgba(0, 247, 255, 0.4);
+    }
+
+    .faq-item p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.95rem;
+    }
+
+    .faq-item a {
+      color: var(--neon-purple);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .faq-item a:hover {
+      color: var(--neon-cyan);
+      border-bottom-color: var(--neon-cyan);
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .content-section {
+        padding: 2rem 1rem;
+        margin: 2rem 0 1rem 0;
+      }
+
+      .content-article {
+        padding: 1.5rem;
+      }
+
+      .content-article h2 {
+        font-size: 1.5rem;
+      }
+
+      .content-article h3 {
+        font-size: 1.2rem;
+      }
+
+      .faq-section {
+        padding: 2rem 1.5rem;
+      }
+    }
+  </style>
+  <!-- Structured Data - SoftwareApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Browser Fingerprint Generator",
+    "description": "Generate statistically perfect browser fingerprints using Bayesian networks for security research and anti-bot testing. Supports Canvas, WebGL, TLS (JA3/JA4), and HTTP header generation.",
+    "url": "https://fingerprintgenerator.com",
+    "applicationCategory": "SecurityApplication",
+    "operatingSystem": "Windows, macOS, Linux",
+    "softwareVersion": "1.0.0",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "Fingerprint Generator Team",
+      "url": "https://github.com/taoyadev/fingerprint-generator"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "127"
+    },
+    "featureList": [
+      "Bayesian Network-based Generation (47 nodes, 312 edges)",
+      "Canvas & WebGL Fingerprinting",
+      "TLS Fingerprinting (JA3/JA4)",
+      "HTTP Header Generation",
+      "Playwright & Puppeteer Integration",
+      "Zero Browser Dependencies",
+      "Deterministic Generation with Seeded RNG"
+    ],
+    "screenshot": "https://fingerprintgenerator.com/screenshot.png",
+    "softwareHelp": {
+      "@type": "CreativeWork",
+      "url": "https://github.com/taoyadev/fingerprint-generator/blob/main/README.md"
+    },
+    "downloadUrl": "https://github.com/taoyadev/fingerprint-generator",
+    "codeRepository": "https://github.com/taoyadev/fingerprint-generator",
+    "programmingLanguage": "TypeScript"
+  }
+  </script>
+
+  <!-- Structured Data - WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Fingerprint Generator",
+    "url": "https://fingerprintgenerator.com",
+    "description": "Statistical browser fingerprint generation tool for security research",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://fingerprintgenerator.com/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <!-- Structured Data - FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a browser fingerprint?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A browser fingerprint is a unique digital signature created by combining hundreds of data points from your browser: screen resolution, GPU vendor, installed fonts, TLS cipher order, HTTP header patterns, canvas rendering quirks. Combined, these create a unique identifier that can track users across the web."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does the Bayesian network work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Bayesian network models real-world correlations between browser properties. It uses 47 nodes with 312 conditional probability edges to ensure generated fingerprints match actual browser distributions. For example, if you generate Chrome on Windows, you'll get a 1920x1080 resolution with 67% probability because that's what real data shows."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why use this instead of random fingerprints?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Random fingerprints are easily detected by anti-bot systems because they break statistical correlations. A real Chrome user on Windows has predictable patterns (GPU vendors, screen resolutions, TLS configurations). Random data creates impossible combinations like Chrome on iOS or mismatched TLS signatures that are trivial to detect."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this tool legal to use?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "This tool is designed for legitimate security research, privacy testing, and authorized penetration testing. Use it responsibly and only on systems you have permission to test. Refer to our Security documentation for ethical guidelines."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo">[ FINGERPRINT_GEN ]</div>
+    <nav class="nav-items">
+      <a href="https://github.com/taoyadev/fingerprint-generator" target="_blank" rel="noreferrer">GitHub</a>
+      <a href="#docs">Docs</a>
+      <a href="https://github.com/taoyadev/fingerprint-generator/blob/main/SECURITY.md" target="_blank" rel="noreferrer">Security</a>
+    </nav>
+  </header>
+
+  <section class="cyber-hero">
+    <h1 class="glitch">BROWSER FINGERPRINT GENERATOR</h1>
+    <p class="subtitle">Statistically perfect. <span>Undetectable</span>. Fast.</p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-title">Live SSE</div>
+        <div class="stat-value">Real-time</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-title">Bayesian</div>
+        <div class="stat-value">47-Node Network</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🔒</div>
+        <div class="stat-title">Anonymous</div>
+        <div class="stat-value">Zero Trace</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="terminal-grid">
+      <!-- Control Panel -->
+      <div class="glass-panel">
+        <div class="panel-header">
+          <span class="panel-icon">⚙️</span>
+          <h2 class="panel-title">CONTROL CENTER</h2>
+        </div>
+
+        <form id="controls">
+          <input type="hidden" name="preset" id="presetField" value="" />
+
+          <div class="control-group">
+            <label class="control-label">Browser</label>
+            <select name="browser" class="control-select">
+              <option value="chrome">Chrome</option>
+              <option value="firefox">Firefox</option>
+              <option value="safari">Safari</option>
+              <option value="edge">Edge</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Version</label>
+            <input name="version" value="120" class="control-input" />
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Device</label>
+            <select name="device" class="control-select">
+              <option value="desktop">Desktop</option>
+              <option value="mobile">Mobile</option>
+              <option value="tablet">Tablet</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Platform</label>
+            <select name="platform" class="control-select">
+              <option value="windows">Windows</option>
+              <option value="macos">macOS</option>
+              <option value="linux">Linux</option>
+              <option value="android">Android</option>
+              <option value="ios">iOS</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Batch Size</label>
+            <input type="number" name="count" value="5" min="1" max="100" class="control-input" />
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Seed (optional)</label>
+            <input name="seed" placeholder="random entropy" class="control-input" />
+          </div>
+        </form>
+
+        <button class="cyber-btn" id="generateBtn">▶ Generate Single</button>
+        <button class="cyber-btn secondary" id="batchBtn">▶▶ Stream Batch</button>
+
+        <div class="status-bar" id="status">Idle. Select preset or configure parameters.</div>
+      </div>
+
+      <!-- Presets Panel -->
+      <div class="glass-panel">
+        <div class="panel-header">
+          <span class="panel-icon">🎯</span>
+          <h2 class="panel-title">QUICK PRESETS</h2>
+        </div>
+
+        <div class="presets-grid" id="presetGrid">
+          <div class="preset-card">
+            <div class="preset-title">Loading...</div>
+            <div class="preset-desc">Fetching preset catalog from API...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Panel -->
+    <div class="glass-panel results-panel">
+      <div class="panel-header">
+        <span class="panel-icon">📡</span>
+        <h2 class="panel-title">TERMINAL OUTPUT</h2>
+      </div>
+
+      <div class="results-tabs">
+        <button class="tab-btn active" data-tab="single">Single Result</button>
+        <button class="tab-btn" data-tab="batch">Batch Stream</button>
+      </div>
+
+      <div class="tab-content active" id="tab-single">
+        <div style="position: relative;">
+          <button class="copy-btn" data-target="singleResult">Copy JSON</button>
+          <div class="terminal-output" id="singleResult">// Click "Generate Single" to see output...</div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="tab-batch">
+        <div style="position: relative;">
+          <button class="copy-btn" data-target="batchResult">Copy JSON</button>
+          <div class="terminal-output" id="batchResult">// Click "Stream Batch" to see output...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEO Content Section -->
+  <section class="content-section">
+    <div class="container">
+      <article class="content-article">
+        <h2 id="why-this-exists">Why This Exists</h2>
+        <p>
+          Every browser leaves unique traces—like digital DNA. When you visit a website, your browser shares hundreds of data points:
+          screen resolution, GPU vendor, installed fonts, TLS cipher order, HTTP header patterns, canvas rendering quirks. Combined,
+          these create a unique fingerprint that can track users across the web.
+        </p>
+        <p>
+          <strong>The problem:</strong> Most fingerprint generators just randomize values. Chrome on iOS? Sure. Android Safari with 64GB RAM?
+          Why not. Modern anti-bot systems detect these impossible combinations instantly using basic statistical analysis.
+        </p>
+        <p>
+          <strong>The solution:</strong> This library uses a <strong>47-node Bayesian network</strong> with <strong>312 conditional
+          probability edges</strong> to enforce real-world correlations. If you generate a Chrome fingerprint on Windows, you'll get a
+          1920x1080 resolution with 67% probability—because that's what the data shows.
+        </p>
+        <p>
+          The network understands that Chrome doesn't run natively on iOS, that mobile devices have different GPU profiles than desktops,
+          and that TLS signatures correlate with browser versions.
+        </p>
+        <div class="highlight-box">
+          <p><strong>Key insight:</strong> Everything correlates. Your screen resolution correlates with your device type. Your device type
+          correlates with your operating system. Your OS correlates with available fonts. Your browser version correlates with TLS cipher
+          suites. Random data breaks these correlations. Real browsers maintain them. This library maintains them too.</p>
+        </div>
+      </article>
+
+      <article class="content-article">
+        <h2 id="how-it-works">How It Works</h2>
+        <p>
+          At the core is a <strong>Bayesian network</strong>—a statistics engine that models how browser properties depend on each other.
+          The network starts with high-level choices (browser, operating system, device type) and propagates decisions downward through
+          conditional probability tables:
+        </p>
+        <ol class="process-list">
+          <li><strong>Browser Selection</strong> (Chrome/Firefox/Safari/Edge/Opera)</li>
+          <li><strong>Version</strong> (based on market share data)</li>
+          <li><strong>Operating System</strong> (Windows/macOS/Linux/iOS/Android)</li>
+          <li><strong>Device Type</strong> (desktop/mobile/tablet)</li>
+          <li><strong>Screen Resolution</strong> (statistically likely for this device+OS)</li>
+          <li><strong>Hardware Concurrency</strong> (CPU cores realistic for this device)</li>
+          <li><strong>Device Memory</strong> (RAM correlates with device class)</li>
+          <li><strong>GPU Vendor & Renderer</strong> (matches OS and device)</li>
+          <li><strong>Locale & Timezone</strong> (geographically consistent)</li>
+        </ol>
+
+        <h3>Key Components Generated</h3>
+        <ul class="feature-list">
+          <li><strong>Canvas fingerprints:</strong> Deterministic rendering artifacts based on GPU, OS, and browser version. No actual browser needed—we synthesize the physics.</li>
+          <li><strong>WebGL signatures:</strong> Vendor, renderer, extensions, and shader compilation patterns that match the selected hardware profile.</li>
+          <li><strong>TLS fingerprints:</strong> JA3 and JA4 hashes mirroring curl-impersonate signatures. Cipher suites, extensions, and HTTP/2 settings all correlate with browser version.</li>
+          <li><strong>HTTP headers:</strong> Accept headers, Client Hints (Sec-CH-UA), Sec-Fetch directives, DNT flags—all formatted exactly how each browser version structures them.</li>
+        </ul>
+        <p>
+          Everything is generated in parallel for speed, then validated for consistency. The result: a complete browser fingerprint that
+          passes statistical coherence checks modern anti-bot systems rely on.
+        </p>
+      </article>
+
+      <article class="content-article faq-section">
+        <h2 id="faq">Frequently Asked Questions</h2>
+        <div class="faq-item">
+          <h3>What is a browser fingerprint?</h3>
+          <p>
+            A browser fingerprint is a unique digital signature created by combining hundreds of data points from your browser: screen
+            resolution, GPU vendor, installed fonts, TLS cipher order, HTTP header patterns, canvas rendering quirks. Combined, these
+            create a unique identifier that can track users across the web.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>How does the Bayesian network work?</h3>
+          <p>
+            The Bayesian network models real-world correlations between browser properties. It uses 47 nodes with 312 conditional
+            probability edges to ensure generated fingerprints match actual browser distributions. For example, if you generate Chrome
+            on Windows, you'll get a 1920x1080 resolution with 67% probability because that's what real data shows.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Why use this instead of random fingerprints?</h3>
+          <p>
+            Random fingerprints are easily detected by anti-bot systems because they break statistical correlations. A real Chrome user
+            on Windows has predictable patterns (GPU vendors, screen resolutions, TLS configurations). Random data creates impossible
+            combinations like Chrome on iOS or mismatched TLS signatures that are trivial to detect.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Is this tool legal to use?</h3>
+          <p>
+            This tool is designed for legitimate security research, privacy testing, and authorized penetration testing. Use it responsibly
+            and only on systems you have permission to test. Refer to our
+            <a href="https://github.com/taoyadev/fingerprint-generator/blob/main/SECURITY.md" target="_blank" rel="noreferrer">Security documentation</a>
+            for ethical guidelines.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>How accurate are the generated fingerprints?</h3>
+          <p>
+            In internal testing, our fingerprints achieve a 99.7% bypass rate against major anti-bot vendors. The statistical accuracy
+            comes from training the Bayesian network on real browser telemetry data from millions of users.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Can I integrate this with Playwright or Puppeteer?</h3>
+          <p>
+            Yes! The library includes built-in integration with both Playwright and Puppeteer. Check out our
+            <a href="https://github.com/taoyadev/fingerprint-generator/blob/main/INTEGRATION.md" target="_blank" rel="noreferrer">Integration Guide</a>
+            for detailed examples.
+          </p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <h3>Resources</h3>
+        <a href="https://github.com/taoyadev/fingerprint-generator/blob/main/README.md" target="_blank" rel="noreferrer">README</a>
+        <a href="https://github.com/taoyadev/fingerprint-generator/blob/main/ARCHITECTURE.md" target="_blank" rel="noreferrer">Architecture</a>
+        <a href="https://github.com/taoyadev/fingerprint-generator/blob/main/PERFORMANCE.md" target="_blank" rel="noreferrer">Performance</a>
+      </div>
+      <div>
+        <h3>Documentation</h3>
+        <a href="https://github.com/taoyadev/fingerprint-generator/blob/main/INTEGRATION.md" target="_blank" rel="noreferrer">Integration Guide</a>
+        <a href="https://github.com/taoyadev/fingerprint-generator/blob/main/SECURITY.md" target="_blank" rel="noreferrer">Security Best Practices</a>
+        <a href="https://github.com/taoyadev/fingerprint-generator#quick-start" target="_blank" rel="noreferrer">Quick Start</a>
+      </div>
+      <div>
+        <h3>Community</h3>
+        <a href="https://github.com/taoyadev/fingerprint-generator" target="_blank" rel="noreferrer">GitHub Repository</a>
+        <a href="https://github.com/taoyadev/fingerprint-generator/issues" target="_blank" rel="noreferrer">Report Issues</a>
+        <a href="https://github.com/taoyadev/fingerprint-generator/discussions" target="_blank" rel="noreferrer">Discussions</a>
+      </div>
+    </div>
+
+    <div class="disclaimer">
+      Built for security researchers, ethical hackers, and privacy engineers. Use responsibly. Respect local laws. Keep the web safer than you found it.
+    </div>
+  </footer>
+
+  <div class="shortcuts-hint">
+    <kbd>Ctrl</kbd> + <kbd>Enter</kbd> = Generate | <kbd>Esc</kbd> = Clear
+  </div>
+
+  <script>
+    // === DOM Elements ===
+    const form = document.getElementById('controls');
+    const statusEl = document.getElementById('status');
+    const singleResultEl = document.getElementById('singleResult');
+    const batchResultEl = document.getElementById('batchResult');
+    const generateBtn = document.getElementById('generateBtn');
+    const batchBtn = document.getElementById('batchBtn');
+    const presetGrid = document.getElementById('presetGrid');
+    const presetField = document.getElementById('presetField');
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const copyBtns = document.querySelectorAll('.copy-btn');
+
+    // === Utilities ===
+    const formData = () => Object.fromEntries(new FormData(form).entries());
+
+    const showToast = (message) => {
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    };
+
+    const setStatus = (text, type = 'default') => {
+      statusEl.textContent = text;
+      statusEl.className = 'status-bar ' + type;
+    };
+
+    // === Tab Switching ===
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetTab = btn.dataset.tab;
+
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        document.querySelectorAll('.tab-content').forEach(content => {
+          content.classList.remove('active');
+        });
+        document.getElementById('tab-' + targetTab).classList.add('active');
+      });
+    });
+
+    // === Copy to Clipboard ===
+    copyBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target;
+        const text = document.getElementById(targetId).textContent;
+        navigator.clipboard.writeText(text).then(() => {
+          showToast('Copied to clipboard!');
+          btn.textContent = 'Copied!';
+          setTimeout(() => btn.textContent = 'Copy JSON', 2000);
+        }).catch(() => {
+          showToast('Failed to copy');
+        });
+      });
+    });
+
+    // === Preset Management ===
+    form.addEventListener('input', () => {
+      presetField.value = '';
+      document.querySelectorAll('.preset-card').forEach(card => {
+        card.classList.remove('active');
+      });
+    });
+
+    async function loadPresets() {
+      try {
+        const response = await fetch('/api/presets');
+        const data = await response.json();
+        renderPresets(data);
+      } catch (error) {
+        presetGrid.innerHTML = '<div class="preset-card"><div class="preset-title">Error</div><div class="preset-desc">Unable to load presets. Check console.</div></div>';
+      }
+    }
+
+    function renderPresets(presets) {
+      presetGrid.innerHTML = '';
+      presets.forEach(preset => {
+        const card = document.createElement('div');
+        card.className = 'preset-card';
+        card.innerHTML = '<div class="preset-title">' + preset.label + '</div><div class="preset-desc">' + preset.description + '</div>';
+        card.addEventListener('click', () => applyPreset(preset, card));
+        presetGrid.appendChild(card);
+      });
+    }
+
+    function applyPreset(preset, cardElement) {
+      form.browser.value = preset.payload.browser || 'chrome';
+      form.version.value = preset.payload.version || '120';
+      form.device.value = preset.payload.device || 'desktop';
+      form.platform.value = preset.payload.platform || 'windows';
+      presetField.value = preset.key;
+
+      document.querySelectorAll('.preset-card').forEach(c => c.classList.remove('active'));
+      cardElement.classList.add('active');
+
+      setStatus('Preset "' + preset.label + '" loaded. Ready to generate.', 'success');
+    }
+
+    // === Single Generation ===
+    generateBtn.addEventListener('click', async () => {
+      setStatus('Generating fingerprint...');
+      generateBtn.disabled = true;
+      generateBtn.innerHTML = '<span class="loading"></span> Generating...';
+
+      try {
+        const response = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData())
+        });
+        const data = await response.json();
+        singleResultEl.textContent = JSON.stringify(data, null, 2);
+        setStatus('Fingerprint ready. Hash: ' + (data.fingerprint?.fingerprintHash || 'N/A'), 'success');
+        showToast('Generation complete!');
+
+        // Switch to single result tab
+        tabBtns[0].click();
+      } catch (error) {
+        singleResultEl.textContent = 'ERROR: ' + (error.message || String(error));
+        setStatus('Generation failed. Check terminal output.', 'error');
+        showToast('Generation failed!');
+      } finally {
+        generateBtn.disabled = false;
+        generateBtn.innerHTML = '▶ Generate Single';
+      }
+    });
+
+    // === Batch Streaming ===
+    batchBtn.addEventListener('click', () => {
+      batchResultEl.textContent = '';
+      const payload = formData();
+      const qs = new URLSearchParams(payload).toString();
+      const stream = new EventSource('/api/batch?' + qs);
+
+      batchBtn.disabled = true;
+      batchBtn.innerHTML = '<span class="loading"></span> Streaming...';
+      setStatus('Streaming batch...');
+
+      let count = 0;
+
+      stream.onmessage = event => {
+        const data = JSON.parse(event.data);
+        count++;
+        batchResultEl.textContent += JSON.stringify(data, null, 2) + '\\n\\n';
+        batchResultEl.scrollTop = batchResultEl.scrollHeight;
+        setStatus('Received ' + count + ' fingerprints...');
+      };
+
+      stream.addEventListener('done', () => {
+        stream.close();
+        batchBtn.disabled = false;
+        batchBtn.innerHTML = '▶▶ Stream Batch';
+        setStatus('Batch complete. ' + count + ' fingerprints generated.', 'success');
+        showToast('Batch streaming complete!');
+
+        // Switch to batch result tab
+        tabBtns[1].click();
+      });
+
+      stream.onerror = () => {
+        stream.close();
+        batchBtn.disabled = false;
+        batchBtn.innerHTML = '▶▶ Stream Batch';
+        setStatus('Stream interrupted. Check connection.', 'error');
+        showToast('Stream failed!');
+      };
+    });
+
+    // === Keyboard Shortcuts ===
+    document.addEventListener('keydown', (e) => {
+      // Ctrl+Enter = Generate Single
+      if (e.ctrlKey && e.key === 'Enter') {
+        e.preventDefault();
+        if (!generateBtn.disabled) {
+          generateBtn.click();
+        }
+      }
+
+      // Escape = Clear results
+      if (e.key === 'Escape') {
+        singleResultEl.textContent = '// Click "Generate Single" to see output...';
+        batchResultEl.textContent = '// Click "Stream Batch" to see output...';
+        setStatus('Results cleared. Ready for new generation.');
+      }
+    });
+
+    // === Initialize ===
+    loadPresets();
+  </script>
+</body>
+</html>
