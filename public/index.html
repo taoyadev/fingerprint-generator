@@ -1280,6 +1280,9 @@
   </div>
 
   <script>
+    // === Configuration ===
+    const API_BASE_URL = 'https://fingerprint-api.yonglivelo.workers.dev';
+
     // === DOM Elements ===
     const form = document.getElementById('controls');
     const statusEl = document.getElementById('status');
@@ -1348,7 +1351,7 @@
 
     async function loadPresets() {
       try {
-        const response = await fetch('/api/presets');
+        const response = await fetch(API_BASE_URL + '/api/presets');
         const data = await response.json();
         renderPresets(data);
       } catch (error) {
@@ -1387,7 +1390,7 @@
       generateBtn.innerHTML = '<span class="loading"></span> Generating...';
 
       try {
-        const response = await fetch('/api/generate', {
+        const response = await fetch(API_BASE_URL + '/api/generate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData())
@@ -1413,8 +1416,18 @@
     batchBtn.addEventListener('click', () => {
       batchResultEl.textContent = '';
       const payload = formData();
+
+      // Note: Batch streaming temporarily unavailable on Worker deployment
+      // Using sequential generation instead
+      showToast('Batch streaming coming soon! Using sequential generation...');
+
+      // Sequential generation as alternative
+      const count = parseInt(payload.count) || 5;
+      batchGenerateSequential(count, payload);
+      return;
+
       const qs = new URLSearchParams(payload).toString();
-      const stream = new EventSource('/api/batch?' + qs);
+      const stream = new EventSource(API_BASE_URL + '/api/batch?' + qs);
 
       batchBtn.disabled = true;
       batchBtn.innerHTML = '<span class="loading"></span> Streaming...';
@@ -1449,6 +1462,35 @@
         showToast('Stream failed!');
       };
     });
+
+    // === Sequential Batch Generation ===
+    async function batchGenerateSequential(count, payload) {
+      batchBtn.disabled = true;
+      batchBtn.innerHTML = '<span class="loading"></span> Generating...';
+      setStatus('Generating batch...');
+
+      for (let i = 0; i < count; i++) {
+        try {
+          const response = await fetch(API_BASE_URL + '/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const data = await response.json();
+          batchResultEl.textContent += JSON.stringify({ index: i + 1, total: count, ...data }, null, 2) + '\\n\\n';
+          batchResultEl.scrollTop = batchResultEl.scrollHeight;
+          setStatus(`Generated ${i + 1}/${count} fingerprints...`);
+        } catch (error) {
+          batchResultEl.textContent += `Error on ${i + 1}: ${error.message}\\n\\n`;
+        }
+      }
+
+      batchBtn.disabled = false;
+      batchBtn.innerHTML = '▶▶ Stream Batch';
+      setStatus(`Batch complete. ${count} fingerprints generated.`, 'success');
+      showToast('Batch generation complete!');
+      tabBtns[1].click();
+    }
 
     // === Keyboard Shortcuts ===
     document.addEventListener('keydown', (e) => {

@@ -1,0 +1,8 @@
+name = "fingerprint-api"
+main = "fingerprint-api.js"
+compatibility_date = "2024-11-07"
+account_id = "3f5817a92bd1541ccc8df714e21a2b8b"
+workers_dev = true
+
+# Route configuration
+# The worker will be available at: fingerprint-api.<your-subdomain>.workers.dev
