@@ -127,6 +127,19 @@ Sitemap: https://fingerprintgenerator.com/sitemap.xml
       return;
     }
 
+    if (req.method === 'GET' && url.pathname === '/og-image.svg') {
+      const fs = await import('fs/promises');
+      try {
+        const svg = await fs.readFile('./public/og-image.svg', 'utf-8');
+        res.writeHead(200, { 'Content-Type': 'image/svg+xml' });
+        res.end(svg);
+      } catch (err) {
+        res.writeHead(404);
+        res.end('Not found');
+      }
+      return;
+    }
+
     res.writeHead(404, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ error: 'Not found' }));
   } catch (error) {
