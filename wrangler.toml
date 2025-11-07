@@ -1,3 +1,10 @@
 name = "fingerprint-generator"
 compatibility_date = "2024-11-07"
 pages_build_output_dir = "./public"
+
+# Node.js compatibility for Pages Functions
+[build]
+command = "npm install && npm run build"
+
+# Enable Node.js compatibility layer for Functions
+compatibility_flags = ["nodejs_compat"]

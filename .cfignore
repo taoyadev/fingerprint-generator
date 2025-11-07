@@ -1,0 +1,15 @@
+# Cloudflare Pages deployment - don't ignore these
+# (opposite of .gitignore for certain build outputs)
+
+# Keep node_modules ignored
+node_modules/
+
+# Keep environment files ignored
+.env
+.env.*
+
+# Keep IDE files ignored
+.vscode/
+.idea/
+
+# Everything else should be included for deployment
