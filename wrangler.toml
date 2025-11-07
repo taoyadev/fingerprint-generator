@@ -1,0 +1,14 @@
+name = "fingerprint-generator"
+compatibility_date = "2024-11-07"
+pages_build_output_dir = "./dist"
+
+[build]
+command = "npm run build"
+cwd = "."
+
+[build.upload]
+format = "service-worker"
+
+[[env_vars]]
+name = "NODE_ENV"
+value = "production"
