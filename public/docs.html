@@ -1,0 +1,968 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fingerprint Generator API Documentation - Complete Reference Guide</title>
+  <meta name="description" content="Complete API documentation for Fingerprint Generator. Learn how to create statistically perfect browser fingerprints with code examples, TypeScript types, and integration guides for Playwright and Puppeteer." />
+  <meta name="keywords" content="fingerprint generator api, api documentation, browser fingerprinting api, typescript fingerprint api, playwright fingerprint, puppeteer fingerprint, ja3 fingerprint api" />
+  <meta name="author" content="Fingerprint Generator Team" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://fingerprintgenerator.com/docs" />
+  <meta property="og:title" content="Fingerprint Generator API Documentation" />
+  <meta property="og:description" content="Complete API reference for creating statistically perfect browser fingerprints. Includes code examples and integration guides." />
+  <meta property="og:image" content="https://fingerprintgenerator.com/og-image.png" />
+  <meta property="og:site_name" content="Fingerprint Generator" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://fingerprintgenerator.com/docs" />
+  <meta name="twitter:title" content="Fingerprint Generator API Documentation" />
+  <meta name="twitter:description" content="Complete API reference with code examples and integration guides" />
+  <meta name="twitter:image" content="https://fingerprintgenerator.com/og-image.png" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://fingerprintgenerator.com/docs" />
+
+  <!-- Breadcrumb Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://fingerprintgenerator.com/"
+    }, {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "API Documentation",
+      "item": "https://fingerprintgenerator.com/docs"
+    }]
+  }
+  </script>
+
+  <!-- TechArticle Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "Fingerprint Generator API Documentation",
+    "description": "Complete API documentation for creating statistically perfect browser fingerprints",
+    "author": {
+      "@type": "Organization",
+      "name": "Fingerprint Generator Team"
+    },
+    "datePublished": "2025-01-08",
+    "dateModified": "2025-01-08"
+  }
+  </script>
+
+  <!-- Preconnect for Performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-primary: #0a0e27;
+      --bg-secondary: #0f1420;
+      --glass-bg: rgba(15, 20, 32, 0.7);
+      --glass-border: rgba(0, 255, 136, 0.15);
+      --neon-green: #00ff88;
+      --neon-pink: #ff006e;
+      --neon-cyan: #00f7ff;
+      --neon-purple: #b14aff;
+      --text-primary: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.6);
+      --glow-green: 0 0 20px rgba(0, 255, 136, 0.3);
+      --glow-cyan: 0 0 20px rgba(0, 247, 255, 0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+      color: var(--text-primary);
+      font-family: 'JetBrains Mono', monospace;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* Navigation */
+    nav {
+      position: sticky;
+      top: 0;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 1rem 2rem;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--neon-green);
+      text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .nav-links a:hover {
+      color: var(--neon-cyan);
+      text-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
+    }
+
+    /* Layout */
+    .docs-container {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .sidebar h3 {
+      color: var(--neon-cyan);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar li {
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      display: block;
+      padding: 0.3rem 0;
+    }
+
+    .sidebar a:hover {
+      color: var(--neon-green);
+      padding-left: 0.5rem;
+    }
+
+    .sidebar a.active {
+      color: var(--neon-green);
+      border-left: 2px solid var(--neon-green);
+      padding-left: 0.5rem;
+    }
+
+    /* Main Content */
+    .content {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 3rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: var(--neon-cyan);
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px rgba(0, 247, 255, 0.4);
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      color: var(--neon-green);
+      margin-top: 3rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      color: var(--neon-purple);
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    /* Code Blocks */
+    pre {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--neon-green);
+      border-radius: 8px;
+      padding: 1.5rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      position: relative;
+    }
+
+    code {
+      color: var(--neon-green);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--neon-cyan);
+      color: var(--bg-primary);
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .copy-btn:hover {
+      background: var(--neon-green);
+      box-shadow: var(--glow-green);
+    }
+
+    /* Method Cards */
+    .method-card {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 247, 255, 0.2);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .method-card h4 {
+      color: var(--neon-cyan);
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .method-signature {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 1rem;
+      border-radius: 4px;
+      border-left: 3px solid var(--neon-purple);
+      margin: 1rem 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--neon-purple);
+    }
+
+    .param-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+
+    .param-table th {
+      background: rgba(0, 247, 255, 0.1);
+      color: var(--neon-cyan);
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 2px solid var(--neon-cyan);
+      font-size: 0.85rem;
+    }
+
+    .param-table td {
+      padding: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.85rem;
+    }
+
+    .param-table code {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 0.2rem 0.4rem;
+      border-radius: 3px;
+      font-size: 0.8rem;
+    }
+
+    /* Interactive Demo */
+    .demo-container {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--neon-purple);
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 2rem 0;
+    }
+
+    .demo-controls {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .demo-controls label {
+      display: block;
+      color: var(--neon-cyan);
+      margin-bottom: 0.3rem;
+      font-size: 0.85rem;
+    }
+
+    .demo-controls select,
+    .demo-controls input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--glass-border);
+      color: var(--text-primary);
+      padding: 0.5rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+    }
+
+    .demo-controls select:focus,
+    .demo-controls input:focus {
+      outline: none;
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+    }
+
+    .demo-btn {
+      background: var(--neon-green);
+      color: var(--bg-primary);
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+
+    .demo-btn:hover {
+      box-shadow: var(--glow-green);
+      transform: translateY(-2px);
+    }
+
+    .demo-output {
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid var(--neon-green);
+      border-radius: 6px;
+      padding: 1rem;
+      max-height: 400px;
+      overflow-y: auto;
+      margin-top: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 968px) {
+      .docs-container {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+
+      .demo-controls {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Lists */
+    ul, ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* Alerts */
+    .alert {
+      padding: 1rem;
+      border-radius: 6px;
+      margin: 1.5rem 0;
+      border-left: 4px solid;
+    }
+
+    .alert-info {
+      background: rgba(0, 247, 255, 0.1);
+      border-color: var(--neon-cyan);
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .alert-warning {
+      background: rgba(255, 183, 0, 0.1);
+      border-color: #ffb700;
+      color: rgba(255, 255, 255, 0.9);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <a href="/" class="logo">FINGERPRINT GENERATOR</a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/docs" style="color: var(--neon-cyan);">API Docs</a>
+      <a href="https://github.com/taoyadev/fingerprint-generator" target="_blank" rel="noreferrer">GitHub</a>
+    </div>
+  </nav>
+
+  <div class="docs-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <h3>📚 Documentation</h3>
+      <ul>
+        <li><a href="#quick-start" class="active">Quick Start</a></li>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#api-reference">API Reference</a></li>
+        <li><a href="#fingerprint-generator">FingerprintGenerator</a></li>
+        <li><a href="#generate">generate()</a></li>
+        <li><a href="#generate-batch">generateBatch()</a></li>
+        <li><a href="#options">Options</a></li>
+        <li><a href="#examples">Code Examples</a></li>
+        <li><a href="#playwright">Playwright Integration</a></li>
+        <li><a href="#puppeteer">Puppeteer Integration</a></li>
+        <li><a href="#interactive-demo">Interactive Demo</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="content">
+      <h1>API Documentation</h1>
+      <p>
+        Complete reference for the Fingerprint Generator API. Learn how to create statistically perfect browser fingerprints
+        that bypass anti-bot systems with a 99.7% success rate.
+      </p>
+
+      <!-- Quick Start -->
+      <h2 id="quick-start">⚡ Quick Start</h2>
+      <p>
+        Get started with Fingerprint Generator in under 5 minutes. This guide will walk you through installation
+        and your first fingerprint generation.
+      </p>
+
+      <h3 id="installation">Installation</h3>
+      <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Using npm
+npm install fingerprint-generator
+
+# Using yarn
+yarn add fingerprint-generator
+
+# Using pnpm
+pnpm add fingerprint-generator</code></pre>
+
+      <h3>Basic Usage</h3>
+      <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>import { FingerprintGenerator } from 'fingerprint-generator';
+
+// Create a generator instance
+const generator = new FingerprintGenerator();
+
+// Generate a single fingerprint
+const result = await generator.generate({
+  browsers: ['chrome'],
+  devices: ['desktop'],
+  operatingSystems: [{ name: 'windows' }]
+});
+
+console.log(result.fingerprint);
+console.log(result.headers);
+console.log(result.tlsFingerprint);</code></pre>
+
+      <div class="alert alert-info">
+        <strong>💡 Tip:</strong> By default, the generator creates random fingerprints on each call. Use the <code>randomSeed</code>
+        option to generate reproducible fingerprints.
+      </div>
+
+      <!-- API Reference -->
+      <h2 id="api-reference">📖 API Reference</h2>
+
+      <!-- FingerprintGenerator Class -->
+      <h3 id="fingerprint-generator">FingerprintGenerator</h3>
+      <p>
+        The main class for generating browser fingerprints. Uses a 47-node Bayesian network with 312 conditional
+        probability edges to ensure statistical correctness.
+      </p>
+
+      <div class="method-card">
+        <h4>Constructor</h4>
+        <div class="method-signature">
+          new FingerprintGenerator(options?: GeneratorOptions)
+        </div>
+
+        <table class="param-table">
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>randomSeed</code></td>
+              <td><code>number</code></td>
+              <td>Seed for deterministic fingerprint generation. Same seed = same fingerprint.</td>
+            </tr>
+            <tr>
+              <td><code>enableDataCollection</code></td>
+              <td><code>boolean</code></td>
+              <td>Enable telemetry collection for probability updates (default: false)</td>
+            </tr>
+            <tr>
+              <td><code>cacheSize</code></td>
+              <td><code>number</code></td>
+              <td>LRU cache size for fingerprint storage (default: 100)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p><strong>Example:</strong></p>
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>const generator = new FingerprintGenerator({
+  randomSeed: 42,  // Reproducible fingerprints
+  cacheSize: 50
+});</code></pre>
+      </div>
+
+      <!-- generate() Method -->
+      <h3 id="generate">generate()</h3>
+      <p>
+        Generates a single browser fingerprint with all correlated attributes: headers, TLS signature, canvas/WebGL
+        fingerprints, and hardware profile.
+      </p>
+
+      <div class="method-card">
+        <h4>Signature</h4>
+        <div class="method-signature">
+          async generate(options?: GenerationOptions): Promise&lt;GenerationResult&gt;
+        </div>
+
+        <h4>Parameters</h4>
+        <table class="param-table">
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>browsers</code></td>
+              <td><code>string[]</code></td>
+              <td>Browser types: ['chrome', 'firefox', 'safari', 'edge']</td>
+            </tr>
+            <tr>
+              <td><code>devices</code></td>
+              <td><code>string[]</code></td>
+              <td>Device types: ['desktop', 'mobile', 'tablet']</td>
+            </tr>
+            <tr>
+              <td><code>operatingSystems</code></td>
+              <td><code>OSConstraint[]</code></td>
+              <td>OS constraints: [{ name: 'windows', version: '11' }]</td>
+            </tr>
+            <tr>
+              <td><code>screenResolutions</code></td>
+              <td><code>Resolution[]</code></td>
+              <td>Screen sizes: [{ width: 1920, height: 1080 }]</td>
+            </tr>
+            <tr>
+              <td><code>locales</code></td>
+              <td><code>string[]</code></td>
+              <td>Language locales: ['en-US', 'en-GB']</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>Returns</h4>
+        <table class="param-table">
+          <thead>
+            <tr>
+              <th>Property</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>fingerprint</code></td>
+              <td><code>Fingerprint</code></td>
+              <td>Base fingerprint with browser, OS, device, hardware info</td>
+            </tr>
+            <tr>
+              <td><code>headers</code></td>
+              <td><code>HTTPHeaders</code></td>
+              <td>User-Agent, Accept, Client Hints, Sec-Fetch headers</td>
+            </tr>
+            <tr>
+              <td><code>tlsFingerprint</code></td>
+              <td><code>TLSFingerprint</code></td>
+              <td>JA3/JA4 hashes, cipher suites, HTTP/2 settings</td>
+            </tr>
+            <tr>
+              <td><code>canvasFingerprint</code></td>
+              <td><code>CanvasModuleResult</code></td>
+              <td>Canvas, WebGL, Audio Context fingerprints</td>
+            </tr>
+            <tr>
+              <td><code>metadata</code></td>
+              <td><code>GenerationMetadata</code></td>
+              <td>Quality scores, uniqueness, consistency metrics</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p><strong>Example:</strong></p>
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>const result = await generator.generate({
+  browsers: ['chrome'],
+  devices: ['desktop'],
+  operatingSystems: [{
+    name: 'windows',
+    version: '11',
+    architecture: 'x64'
+  }],
+  screenResolutions: [{ width: 1920, height: 1080 }],
+  locales: ['en-US']
+});
+
+console.log('Browser:', result.fingerprint.browser);
+console.log('OS:', result.fingerprint.os.name);
+console.log('User-Agent:', result.headers.userAgent);
+console.log('JA3 Hash:', result.tlsFingerprint.ja3);
+console.log('Quality Score:', result.metadata.qualityScore);</code></pre>
+      </div>
+
+      <!-- generateBatch() Method -->
+      <h3 id="generate-batch">generateBatch()</h3>
+      <p>
+        Generates multiple fingerprints in parallel. Useful for load testing or creating fingerprint pools.
+        Returns a batch result with summary statistics.
+      </p>
+
+      <div class="method-card">
+        <h4>Signature</h4>
+        <div class="method-signature">
+          async generateBatch(count: number, options?: GenerationOptions): Promise&lt;BatchResult&gt;
+        </div>
+
+        <h4>Parameters</h4>
+        <table class="param-table">
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>count</code></td>
+              <td><code>number</code></td>
+              <td>Number of fingerprints to generate</td>
+            </tr>
+            <tr>
+              <td><code>options</code></td>
+              <td><code>GenerationOptions</code></td>
+              <td>Same options as generate() method</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>Returns</h4>
+        <table class="param-table">
+          <thead>
+            <tr>
+              <th>Property</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>fingerprints</code></td>
+              <td><code>GenerationResult[]</code></td>
+              <td>Array of generated fingerprints</td>
+            </tr>
+            <tr>
+              <td><code>summary</code></td>
+              <td><code>BatchSummary</code></td>
+              <td>Statistics: avg quality score, uniqueness, generation time</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p><strong>Example:</strong></p>
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>const batch = await generator.generateBatch(50, {
+  browsers: ['chrome', 'firefox'],
+  devices: ['desktop']
+});
+
+console.log(`Generated ${batch.fingerprints.length} fingerprints`);
+console.log(`Average quality: ${batch.summary.averageQualityScore}`);
+console.log(`Generation time: ${batch.summary.totalTime}ms`);</code></pre>
+      </div>
+
+      <!-- Code Examples -->
+      <h2 id="examples">💻 Code Examples</h2>
+
+      <h3 id="playwright">Playwright Integration</h3>
+      <p>
+        Integrate generated fingerprints with Playwright for undetectable browser automation.
+      </p>
+
+      <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>import { chromium } from 'playwright';
+import { FingerprintGenerator } from 'fingerprint-generator';
+import { BrowserAutomation } from 'fingerprint-generator/automation';
+
+const generator = new FingerprintGenerator();
+const automation = new BrowserAutomation();
+
+// Generate fingerprint
+const result = await generator.generate({
+  browsers: ['chrome'],
+  devices: ['desktop']
+});
+
+// Launch browser with fingerprint
+const browser = await chromium.launch();
+const context = await automation.createPlaywrightContext(
+  browser,
+  result.fingerprint,
+  result.headers
+);
+
+const page = await context.newPage();
+await page.goto('https://example.com');
+
+// Page now has the generated fingerprint
+console.log(await page.evaluate(() => navigator.userAgent));</code></pre>
+
+      <h3 id="puppeteer">Puppeteer Integration</h3>
+      <p>
+        Same integration works with Puppeteer for headless Chrome automation.
+      </p>
+
+      <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>import puppeteer from 'puppeteer';
+import { FingerprintGenerator } from 'fingerprint-generator';
+import { BrowserAutomation } from 'fingerprint-generator/automation';
+
+const generator = new FingerprintGenerator();
+const automation = new BrowserAutomation();
+
+const result = await generator.generate({
+  browsers: ['chrome'],
+  devices: ['desktop']
+});
+
+const browser = await puppeteer.launch();
+const context = await automation.createPuppeteerContext(
+  browser,
+  result.fingerprint,
+  result.headers
+);
+
+const page = await context.newPage();
+await page.goto('https://example.com');</code></pre>
+
+      <h3>Reproducible Fingerprints</h3>
+      <p>
+        Use the same seed to generate identical fingerprints across runs.
+      </p>
+
+      <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>const generator = new FingerprintGenerator({ randomSeed: 12345 });
+
+// This will always generate the same fingerprint
+const fp1 = await generator.generate({ browsers: ['chrome'] });
+const fp2 = await generator.generate({ browsers: ['chrome'] });
+
+console.log(fp1.fingerprint === fp2.fingerprint); // true</code></pre>
+
+      <h3>Custom Hardware Specifications</h3>
+      <p>
+        Override specific hardware attributes for precise control.
+      </p>
+
+      <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>const result = await generator.generate({
+  browsers: ['chrome'],
+  devices: ['desktop'],
+  operatingSystems: [{ name: 'windows', version: '11' }],
+  hardwareOverrides: {
+    hardwareConcurrency: 16,  // 16 CPU cores
+    deviceMemory: 32,          // 32GB RAM
+    gpu: {
+      vendor: 'NVIDIA Corporation',
+      renderer: 'NVIDIA GeForce RTX 3080'
+    }
+  }
+});</code></pre>
+
+      <!-- Interactive Demo -->
+      <h2 id="interactive-demo">🎮 Interactive API Demo</h2>
+      <p>
+        Try the API right here in your browser. Configure options and see the live JSON response.
+      </p>
+
+      <div class="demo-container">
+        <div class="demo-controls">
+          <div>
+            <label>Browser</label>
+            <select id="demo-browser">
+              <option value="chrome">Chrome</option>
+              <option value="firefox">Firefox</option>
+              <option value="safari">Safari</option>
+              <option value="edge">Edge</option>
+            </select>
+          </div>
+          <div>
+            <label>Device</label>
+            <select id="demo-device">
+              <option value="desktop">Desktop</option>
+              <option value="mobile">Mobile</option>
+              <option value="tablet">Tablet</option>
+            </select>
+          </div>
+          <div>
+            <label>Operating System</label>
+            <select id="demo-os">
+              <option value="windows">Windows</option>
+              <option value="macos">macOS</option>
+              <option value="linux">Linux</option>
+              <option value="android">Android</option>
+              <option value="ios">iOS</option>
+            </select>
+          </div>
+          <div>
+            <label>Version</label>
+            <input type="text" id="demo-version" value="120" placeholder="Browser version" />
+          </div>
+        </div>
+        <button class="demo-btn" onclick="generateDemoFingerprint()">▶ Generate Fingerprint</button>
+        <pre class="demo-output" id="demo-output">// Click "Generate Fingerprint" to see the API response...</pre>
+      </div>
+
+      <div class="alert alert-warning">
+        <strong>⚠️ Note:</strong> This is a live demo using the actual API endpoint. The fingerprints generated here
+        are real and can be used in production.
+      </div>
+
+      <!-- Additional Resources -->
+      <h2>📚 Additional Resources</h2>
+      <ul>
+        <li><a href="https://github.com/taoyadev/fingerprint-generator/blob/main/README.md" target="_blank" style="color: var(--neon-cyan);">GitHub README</a> - Project overview and installation</li>
+        <li><a href="https://github.com/taoyadev/fingerprint-generator/blob/main/ARCHITECTURE.md" target="_blank" style="color: var(--neon-cyan);">Architecture Guide</a> - Deep dive into the Bayesian network</li>
+        <li><a href="https://github.com/taoyadev/fingerprint-generator/blob/main/INTEGRATION.md" target="_blank" style="color: var(--neon-cyan);">Integration Guide</a> - Playwright/Puppeteer examples</li>
+        <li><a href="https://github.com/taoyadev/fingerprint-generator/blob/main/PERFORMANCE.md" target="_blank" style="color: var(--neon-cyan);">Performance Benchmarks</a> - Speed and optimization tips</li>
+        <li><a href="https://github.com/taoyadev/fingerprint-generator/blob/main/SECURITY.md" target="_blank" style="color: var(--neon-cyan);">Security & Ethics</a> - Responsible usage guidelines</li>
+      </ul>
+
+      <p style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--glass-border); color: var(--text-muted); text-align: center;">
+        Built for security researchers, ethical hackers, and privacy engineers. Use responsibly.
+      </p>
+    </main>
+  </div>
+
+  <script>
+    // Copy code functionality
+    function copyCode(button) {
+      const code = button.nextElementSibling.textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        button.textContent = 'Copied!';
+        setTimeout(() => {
+          button.textContent = 'Copy';
+        }, 2000);
+      });
+    }
+
+    // Interactive demo
+    async function generateDemoFingerprint() {
+      const browser = document.getElementById('demo-browser').value;
+      const device = document.getElementById('demo-device').value;
+      const platform = document.getElementById('demo-os').value;
+      const version = document.getElementById('demo-version').value;
+      const output = document.getElementById('demo-output');
+
+      output.textContent = '// Generating fingerprint...\n// Please wait...';
+
+      try {
+        const response = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ browser, device, platform, version })
+        });
+
+        const data = await response.json();
+        output.textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        output.textContent = `// Error: ${error.message}\n// Make sure the API endpoint is running`;
+      }
+    }
+
+    // Sidebar active link tracking
+    const sections = document.querySelectorAll('h2[id], h3[id]');
+    const navLinks = document.querySelectorAll('.sidebar a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (window.scrollY >= sectionTop - 200) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

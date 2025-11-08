@@ -1,6 +1,12 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "public",
+  "rewrites": [
+    {
+      "source": "/docs",
+      "destination": "/docs.html"
+    }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",
